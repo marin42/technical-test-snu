@@ -14,5 +14,6 @@ module.exports = {
   rules: {
     "react/jsx-no-duplicate-props": 1,
     "react/prop-types": 0,
+    "react/display-name": 0,
   },
 };
