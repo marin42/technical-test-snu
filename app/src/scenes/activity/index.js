@@ -10,6 +10,8 @@ import SelectMonth from "./../../components/selectMonth";
 
 import { getDaysInMonth } from "./utils";
 
+const MAX_DAILY_BILLABLE_HOURS = 8;
+
 const Activity = () => {
   const [date, setDate] = useState(null);
   const [user, setUser] = useState(null);
@@ -112,7 +114,12 @@ const Activities = ({ date, user, project, projectList }) => {
     }
   }
 
-  function onUpdateValue(i, j, value) {
+  function onUpdateValue(i, j, newValue) {
+    //M
+    const value = Math.min(newValue, MAX_DAILY_BILLABLE_HOURS);
+    console.log(i);
+    console.log(j);
+    console.log(value);
     const n = [...activities];
     n[i].detail[j].value = value;
     n[i].total = n[i].detail.reduce((acc, b) => acc + b.value, 0);

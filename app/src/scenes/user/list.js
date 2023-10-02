@@ -113,11 +113,8 @@ const Create = () => {
               }}
               onSubmit={async (values, { setSubmitting }) => {
                 try {
-                  console.log("User values");
-                  console.log(values);
                   values.status = "active";
                   values.availability = "not available";
-                  values.role = "ADMIN";
                   const res = await api.post("/user", values);
                   if (!res.ok) throw res;
                   toast.success("Created!");
@@ -166,7 +163,6 @@ const Create = () => {
                           className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]"
                           validate={(v) => {
                             if (validator.isEmpty(v)) return "This field is Required";
-                            console.log("IN VALIDATOR");
                             if (v?.length < 6) return "Password length must be at leat 6 characters";
                             return false;
                           }}
