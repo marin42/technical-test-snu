@@ -1,8 +1,9 @@
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router-dom";
 import Loader from "../../components/loader";
+import validator from "validator";
 import LoadingButton from "../../components/loadingButton";
 import api from "../../services/api";
 
@@ -105,9 +106,15 @@ const Create = () => {
               e.stopPropagation();
             }}>
             <Formik
-              initialValues={{}}
+              initialValues={{
+                name: "",
+                email: "",
+                password: "",
+              }}
               onSubmit={async (values, { setSubmitting }) => {
                 try {
+                  console.log("User values");
+                  console.log(values);
                   values.status = "active";
                   values.availability = "not available";
                   values.role = "ADMIN";
@@ -122,24 +129,54 @@ const Create = () => {
                 }
                 setSubmitting(false);
               }}>
-              {({ values, handleChange, handleSubmit, isSubmitting }) => (
+              {({ values, errors, handleChange, handleSubmit, isSubmitting }) => (
                 <React.Fragment>
                   <div>
                     <div className="flex justify-between flex-wrap">
                       <div className="w-full md:w-[48%] mt-2">
                         <div className="text-[14px] text-[#212325] font-medium	">Name</div>
-                        <input className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]" name="username" value={values.username} onChange={handleChange} />
+                        <Field
+                          className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]"
+                          validate={(v) => validator.isEmpty(v) && "This field is Required"}
+                          name="name"
+                          type="text"
+                          id="name"
+                          value={values.name}
+                          onChange={handleChange}
+                        />
+                        <p className="text-[12px] text-[#FD3131] mt-2">{errors.name}</p>
                       </div>
                       <div className="w-full md:w-[48%] mt-2">
                         <div className="text-[14px] text-[#212325] font-medium	">Email</div>
-                        <input className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]" name="email" value={values.email} onChange={handleChange} />
+                        <Field
+                          className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]"
+                          name="email"
+                          type="email"
+                          id="email"
+                          value={values.email}
+                          onChange={handleChange}
+                        />
                       </div>
                     </div>
                     <div className="flex justify-between flex-wrap mt-3">
                       {/* Password */}
                       <div className="w-full md:w-[48%] mt-2">
                         <div className="text-[14px] text-[#212325] font-medium	">Password</div>
-                        <input className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]" name="password" value={values.password} onChange={handleChange} />
+                        <Field
+                          className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]"
+                          validate={(v) => {
+                            if (validator.isEmpty(v)) return "This field is Required";
+                            console.log("IN VALIDATOR");
+                            if (v?.length < 6) return "Password length must be at leat 6 characters";
+                            return false;
+                          }}
+                          name="password"
+                          type="password"
+                          id="password"
+                          value={values.password}
+                          onChange={handleChange}
+                        />
+                        <p className="text-[12px] text-[#FD3131] mt-2">{errors.password}</p>
                       </div>
                     </div>
                   </div>
