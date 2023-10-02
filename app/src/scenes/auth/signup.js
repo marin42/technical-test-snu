@@ -1,5 +1,5 @@
 import { Field, Formik } from "formik";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -13,6 +13,14 @@ import api from "../../services/api";
 export default () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.Auth.user);
+  const [organizations, setOrganizations] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await api.get("/organization");
+      setOrganizations(data);
+    })();
+  }, []);
 
   return (
     // Auth Wrapper
@@ -56,15 +64,13 @@ export default () => {
               </div>
               <div className="mb-[25px]">
                 <div className="flex flex-col-reverse">
-                  <Field
-                    className="peer signInInputs "
-                    validate={(v) => validator.isEmpty(v) && "This field is Required"}
-                    name="organisation"
-                    type="text"
-                    id="organisation"
-                    value={values.organisation}
-                    onChange={handleChange}
-                  />
+                  <Field as="select" className="peer signInInputs " game="organisation" id="organisation" value={values.organisation} onChange={handleChange}>
+                    {organizations.map(({ _id, name }) => (
+                      <option key={_id} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </Field>
                   <label className="peer-focus:text-[#116eee]" htmlFor="organisation">
                     Organisation name
                   </label>
