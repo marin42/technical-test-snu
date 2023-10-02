@@ -2,7 +2,7 @@ import { Field, Formik } from "formik";
 import React from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import validator from "validator";
 
 import { setUser } from "../../redux/auth/actions";
@@ -76,7 +76,11 @@ export default () => {
                 <div className="flex flex-col-reverse">
                   <Field
                     className="peer signInInputs"
-                    validate={(v) => validator.isEmpty(v) && "This field is Required"}
+                    validate={(v) => {
+                      if (validator.isEmpty(v)) return "This field is Required";
+                      if (v.length < 6) return "Password length must be at leat 6 characters";
+                      return false;
+                    }}
                     name="password"
                     type="password"
                     id="password"
