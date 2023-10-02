@@ -116,10 +116,13 @@ const Activities = ({ date, user, project, projectList }) => {
 
   function onUpdateValue(i, j, newValue) {
     //M
-    const value = Math.min(newValue, MAX_DAILY_BILLABLE_HOURS);
-    console.log(i);
-    console.log(j);
-    console.log(value);
+    const alreadyWorkedHours = activities.reduce((acc, a) => {
+      if (!a.detail[j]) return acc;
+      return acc + a.detail[j].value;
+    }, 0);
+    console.log("TOTAL");
+    console.log(alreadyWorkedHours);
+    const value = Math.min(newValue, Math.ceil(MAX_DAILY_BILLABLE_HOURS - alreadyWorkedHours));
     const n = [...activities];
     n[i].detail[j].value = value;
     n[i].total = n[i].detail.reduce((acc, b) => acc + b.value, 0);
