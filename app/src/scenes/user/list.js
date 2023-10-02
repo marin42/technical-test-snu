@@ -9,7 +9,6 @@ import api from "../../services/api";
 
 const NewList = () => {
   const [users, setUsers] = useState(null);
-  const [projects, setProjects] = useState([]);
   const [usersFiltered, setUsersFiltered] = useState(null);
   const [filter, setFilter] = useState({ status: "active", availability: "", search: "" });
 
@@ -18,13 +17,7 @@ const NewList = () => {
       const { data } = await api.get("/user");
       setUsers(data);
     })();
-    getProjects();
   }, []);
-
-  async function getProjects() {
-    const res = await api.get("/project");
-    setProjects(res.data);
-  }
 
   useEffect(() => {
     if (!users) return;
@@ -77,7 +70,7 @@ const NewList = () => {
         <div className="overflow-x-auto">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6 gap-5 ">
             {usersFiltered.map((hit, idx) => {
-              return <UserCard key={hit._id} idx={idx} hit={hit} projects={projects} />;
+              return <UserCard key={hit._id} idx={idx} hit={hit} />;
             })}
           </div>
         </div>
@@ -243,7 +236,7 @@ const FilterStatus = ({ filter, setFilter }) => {
   );
 };
 
-const UserCard = ({ hit, projects }) => {
+const UserCard = ({ hit }) => {
   const history = useHistory();
   return (
     <div
