@@ -60,7 +60,6 @@ export default function ProjectView() {
 }
 
 const ProjectDetails = ({ project }) => {
-  console.log(project);
   return (
     <div>
       <div className="flex flex-wrap p-3">
@@ -265,7 +264,7 @@ const Links = ({ project }) => {
     <div className="flex flex-wrap gap-3">
       {project.website && (
         <div className="group text-sm font-medium	text-gray-700 border-[1px] border-gray-700 rounded-full overflow-hidden">
-          <a target="blank" href={project.website} className="break-words cursor-pointer text-gray-700 hover:text-white hover:bg-gray-700 flex hover:no-underline h-full">
+          <a target="blank" href={`//${project.website}`} className="break-words cursor-pointer text-gray-700 hover:text-white hover:bg-gray-700 flex hover:no-underline h-full">
             <div className="flex items-center bg-gray-700 py-1 px-2 rounded-r-full ">
               <IoIosAt className="group-hover:scale-110 text-white" />
             </div>
@@ -275,7 +274,7 @@ const Links = ({ project }) => {
       )}
       {project.links?.map((link) => (
         <div className="group text-sm font-medium	text-blue-700 border-[1px] border-blue-700 rounded-full overflow-hidden">
-          <a target="blank" href={link.url} className="break-words cursor-pointer text-blue-700 hover:text-white hover:bg-blue-700 flex hover:no-underline h-full">
+          <a target="blank" href={`//${link.url}`} className="break-words cursor-pointer text-blue-700 hover:text-white hover:bg-blue-700 flex hover:no-underline h-full">
             <div className="flex items-center bg-blue-700 py-1 px-2 rounded-r-full ">
               <IoIosLink className="group-hover:scale-110 text-white" />
             </div>
