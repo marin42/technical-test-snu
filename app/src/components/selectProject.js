@@ -1,20 +1,7 @@
-import React, { useEffect, useState } from "react";
-
-import api from "../services/api";
+import React from "react";
 
 // eslint-disable-next-line react/display-name
-export default ({ value, active = true, onChange }) => {
-  const [projects, setProjects] = useState([]);
-  
-  useEffect(() => {
-    (async () => {
-      let str = ``;
-      if (active) str = `?status=active`;
-      const res = await api.get("/project" + str);
-      setProjects(res.data);
-    })();
-  }, []);
-
+export default ({ value, projectList, onChange, defaultText = "All projects", ...otherProps }) => {
   return (
     <div>
       <select
@@ -23,12 +10,13 @@ export default ({ value, active = true, onChange }) => {
         value={value || ""}
         onChange={(e) => {
           e.preventDefault();
-          const f = projects.find((f) => e.target.value === f.name);
+          const f = projectList.find((f) => e.target.value === f.name) || "";
           onChange(f);
-        }}>
+        }}
+        {...otherProps}>
         <option disabled>Project</option>
-        <option value={""}>All Project</option>
-        {projects
+        <option value={""}>{defaultText}</option>
+        {projectList
           .sort(function (a, b) {
             if (a.name?.toLowerCase() < b.name?.toLowerCase()) return -1;
             if (a.name?.toLowerCase() > b.name?.toLowerCase()) return 1;

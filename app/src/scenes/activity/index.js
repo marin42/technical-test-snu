@@ -13,6 +13,7 @@ import { getDaysInMonth } from "./utils";
 const Activity = () => {
   const [date, setDate] = useState(null);
   const [user, setUser] = useState(null);
+  const [projectList, setProjectList] = useState([]);
   const [project, setProject] = useState("");
 
   const u = useSelector((state) => state.Auth.user);
@@ -24,8 +25,13 @@ const Activity = () => {
     const date = params.get("date");
     if (date) setDate(new Date(date));
 
-    if (user) return setUser({ name: user });
-    return setUser(u);
+    if (user) setUser({ name: user });
+    else setUser(u);
+
+    (async () => {
+      const { data } = await api.get(`/project/list`);
+      setProjectList(data);
+    })();
   }, []);
 
   if (user === null) return <Loader />;
@@ -35,28 +41,33 @@ const Activity = () => {
     <div className="w-screen md:w-full">
       <div className="flex flex-wrap gap-5 p-2 md:!px-8">
         <SelectProject
-          value={project}
-          onChange={(e) => setProject(e.name)}
+          value={project?.name}
+          onChange={(e) => {
+            setProject(e);
+          }}
+          projectList={projectList}
           className="w-[180px] bg-[#FFFFFF] text-[#212325] py-[10px] px-[14px] rounded-[10px] border-r-[16px] border-[transparent] cursor-pointer shadow-sm font-normal text-[14px]"
         />
         <SelectMonth start={-3} indexDefaultValue={3} value={date} onChange={(e) => setDate(e.target.value)} showArrows />
       </div>
-      {date && user && <Activities date={new Date(date)} user={user} project={project} />}
+      {date && user && <Activities date={new Date(date)} user={user} project={project} projectList={projectList} />}
     </div>
   );
 };
 
-const Activities = ({ date, user, project }) => {
+const Activities = ({ date, user, project, projectList }) => {
+  // const currentProjectId = projectList.filter(({ name }) => name === project)[0]?._id;
   const [activities, setActivities] = useState([]);
   const [open, setOpen] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get(`/activity?date=${date.getTime()}&user=${user.name}&project=${project}`);
-      const projects = await api.get(`/project/list`);
+      let queryUrl = `/activity?date=${date.getTime()}&user=${user.name}`;
+      if (project._id) queryUrl = `${queryUrl}&projectId=${project._id}`;
+      const { data } = await api.get(queryUrl);
       setActivities(
         data.map((activity) => {
-          return { ...activity, projectName: (activity.projectName = projects.data.find((project) => project._id === activity.projectId)?.name) };
+          return { ...activity, projectName: (activity.projectName = projectList.find((project) => project._id === activity.projectId)?.name) };
         }),
       );
       setOpen(null);
@@ -224,7 +235,20 @@ const Activities = ({ date, user, project }) => {
                   })}
                   <tr>
                     <th className="w-[50px] text-[12px] text-[#212325] px-[10px] py-2">
-                      <SelectProject disabled={activities.map((e) => e.project)} value="" onChange={(e) => onAddActivities(e)} />
+                      {!project && (
+                        <SelectProject
+                          value=""
+                          onChange={(e) => onAddActivities(e)}
+                          defaultText="Add activity"
+                          projectList={projectList}
+                          disabled={activities.length == projectList.length}
+                        />
+                      )}
+                      {project && !activities.length && (
+                        <button className="w-[120px] h-[24px] bg-[#0560FD] text-[14px]  text-[#fff] rounded-[10px]" onClick={() => onAddActivities(project)}>
+                          Add activity
+                        </button>
+                      )}
                     </th>
                   </tr>
                 </tbody>
