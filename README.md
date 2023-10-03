@@ -15,6 +15,7 @@ Corrected bug list:
 - User was not redirected to project view after creating a project.
 - Hrefs from the field "url" on project were not opened as external hrefs.
 - Update button on user view did not work.
+- The /activity GET call did not handled the `user` filter correctly.
 - The calendar switch was not working on activities view.
 - (NOT FIXED) 'unique' property on user name is not working, but in order to fix it I would have to drop the existing database.
 
