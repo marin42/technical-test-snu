@@ -25,9 +25,11 @@ Features:
 - Made the all calendar clearer, disabling the addActivities switcher/button when the lines are already added.
 - Made the calendar clearer, blocking the max hours user can input in a day to 8, whatever the project, you cannot declare working more than 8 hours a day.
 
-Feedback
+Feedback:
 
 I would definitely advice not to deliver an app at this state of developpment. The calendar page was definitely the fuzziest one, due to several bugs and uncleared UX. I made it a bit clearer but it would imho need an improved UX/UI, or at least, a tutorial.
+
+
 About the architecture:
 - I would drop the use of redux as it is only used for the setUser action.
 - CRUD components are missing consistency as they sometimes are in the same file and sometimes not.
