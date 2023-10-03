@@ -120,8 +120,6 @@ const Activities = ({ date, user, project, projectList }) => {
       if (!a.detail[j]) return acc;
       return acc + a.detail[j].value;
     }, 0);
-    console.log("TOTAL");
-    console.log(alreadyWorkedHours);
     const value = Math.min(newValue, Math.ceil(MAX_DAILY_BILLABLE_HOURS - alreadyWorkedHours));
     const n = [...activities];
     n[i].detail[j].value = value;
