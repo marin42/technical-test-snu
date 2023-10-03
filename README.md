@@ -36,7 +36,7 @@ About the architecture:
 - UX is missing consistency, User view is directly on "edit" mode and other aren't. The fields on ressources are sometimes accessibles in edit mode but not displayed on view (if they are useless than we should delete them).
 - Lack of consistency on what should be the main identifier: email or username.
 - Lack of consistency on variable name, username is sometimes "name" sometimes "username", "organisation" is spelled in french on the front and in english on the backend "organization".
-- The account page seems either unfinished or useless, ad I can access my own profile on the users page.
+- The account page seems either unfinished or useless, as I can access my own profile on the users page.
 
 
 Thank you guys for the test, it was quite interesting, I usually do tests that requires to build an app from scratch implementing only a given feature, this approach is different and was funnier.
