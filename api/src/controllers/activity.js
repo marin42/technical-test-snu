@@ -10,7 +10,7 @@ const SERVER_ERROR = "SERVER_ERROR";
 router.get("/", passport.authenticate("user", { session: false }), async (req, res) => {
   try {
     const query = {};
-    if (req.query.userId) query.user = req.query.userId;
+    if (req.query.userId) query.userId = req.query.userId;
     if (req.query.projectId) query.projectId = req.query.projectId;
     if (req.query.date) {
       if (req.query.date.startsWith("gte:")) {
@@ -43,7 +43,7 @@ router.post("/", passport.authenticate("user", { session: false }), async (req, 
     const body = req.body;
     await ProjectObject.findOneAndUpdate({ _id: body.projectId }, { last_updated_at: new Date() }, { new: true });
     const query = { projectId: body.projectId, userId: body.userId, date: body.date };
-    const activities = await ActivityObject.findOneAndUpdate(query, { ...body, organisation: req.user.organisation }, { new: true, upsert: true });
+    const activities = await ActivityObject.create(query, { ...body, organisation: req.user.organisation }, { new: true, upsert: true });
 
     res.status(200).send({ ok: true, data: activities });
   } catch (error) {

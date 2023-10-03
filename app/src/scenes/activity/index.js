@@ -64,7 +64,7 @@ const Activities = ({ date, user, project, projectList }) => {
 
   useEffect(() => {
     (async () => {
-      let queryUrl = `/activity?date=${date.getTime()}&user=${user.name}`;
+      let queryUrl = `/activity?date=${date.getTime()}&userId=${user._id}`;
       if (project._id) queryUrl = `${queryUrl}&projectId=${project._id}`;
       const { data } = await api.get(queryUrl);
       setActivities(
